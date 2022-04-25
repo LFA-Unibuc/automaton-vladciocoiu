@@ -21,7 +21,7 @@ class Automaton():
                 if lines[i].strip().startswith('Sigma :') or lines[i].strip().startswith('Sigma:'):
                     j = i + 1
                     while j < len(lines) and not lines[j].strip().startswith('End'):
-                        if not len(lines[j].strip()):
+                        if not len(lines[j].strip()) or lines[j].strip().startswith('#'):
                             j += 1
                             continue
                         self.words.append(lines[j].strip())
@@ -33,7 +33,7 @@ class Automaton():
                     j = i + 1
 
                     while j < len(lines) and not lines[j].strip().startswith('End'):
-                        if not len(lines[j].strip()):
+                        if not len(lines[j].strip()) or lines[j].strip().startswith('#'):
                             j += 1
                             continue
                         arr = lines[j].strip().replace(',', ' ').split()
@@ -60,7 +60,7 @@ class Automaton():
 
                     j = i + 1
                     while j < len(lines) and not lines[j].strip().startswith('End'):
-                        if not len(lines[j].strip()):
+                        if not len(lines[j].strip()) or lines[j].strip().startswith('#'):
                             j += 1
                             continue
                         arr = lines[j].strip().replace(',', ' ').split()
