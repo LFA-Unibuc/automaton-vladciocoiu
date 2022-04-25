@@ -5,15 +5,8 @@ class Automaton():
         self.states = {}
         self.words = []
         self.transitions = []
-        print("Hi, I'm an automaton!")
 
     def validate(self):
-        """
-        Return a Boolean
-
-        Returns true if the config file is valid,
-        and raises Exception if the config is invalid.
-        """
         with open(self.config_file, 'r') as f:
             lines = f.readlines()
             i = 0
@@ -28,6 +21,9 @@ class Automaton():
                 if lines[i].strip().startswith('Sigma :') or lines[i].strip().startswith('Sigma:'):
                     j = i + 1
                     while j < len(lines) and not lines[j].strip().startswith('End'):
+                        if not len(lines[j].strip()):
+                            j += 1
+                            continue
                         self.words.append(lines[j].strip())
                         j += 1
                     i = j     
@@ -37,6 +33,9 @@ class Automaton():
                     j = i + 1
 
                     while j < len(lines) and not lines[j].strip().startswith('End'):
+                        if not len(lines[j].strip()):
+                            j += 1
+                            continue
                         arr = lines[j].strip().replace(',', ' ').split()
 
                         # state.start is a bool that indicates if it is a starting state
@@ -61,14 +60,18 @@ class Automaton():
 
                     j = i + 1
                     while j < len(lines) and not lines[j].strip().startswith('End'):
+                        if not len(lines[j].strip()):
+                            j += 1
+                            continue
                         arr = lines[j].strip().replace(',', ' ').split()
 
-                        # raise exceptions if invalid transitions
                         if len(arr) != 3:
-                            raise Exception('Invalid transition\n' + lines[j].strip())
+                            # raise Exception('Invalid transition\n' + lines[j].strip())
+                            return False
 
                         if arr[1] not in self.words:
-                            raise Exception('Invalid transition\n' + lines[j].strip())
+                            # raise Exception('Invalid transition\n' + lines[j].strip())
+                            return False
 
                         firstStateIsValid = False
                         for state in self.states:
@@ -81,7 +84,8 @@ class Automaton():
                                 secondStateIsValid = True
 
                         if not firstStateIsValid or not secondStateIsValid:
-                            raise Exception('Invalid transition\n' + lines[j].strip())
+                            # raise Exception('Invalid transition\n' + lines[j].strip())
+                            return False
 
                         # add transition to array
                         self.transitions[arr[0]][arr[1]].append(arr[2])
@@ -90,7 +94,8 @@ class Automaton():
                     i = j
                 
                 else:
-                    raise Exception('Invalid config file\n' + lines[i].strip())
+                    return False
+                    # raise Exception('Invalid config file\n' + lines[i].strip())
 
 
                 i += 1
